@@ -6,4 +6,18 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+##RMarkdown File to segment trees and compute metrics
+```{r}
+library(lidR)
+
+las = readLAS("Example.las")
+plot(las)
+```
+```{r}
+las = classify_ground(las, csf())
+plot(las, color = "Classification")
+```
+```{r}
+
+```
 
