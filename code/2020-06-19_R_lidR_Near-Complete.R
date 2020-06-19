@@ -1,6 +1,12 @@
 #print
 library(lidR)
-las = readLAS("/home/rstudio/keys/keys/code/Example.las", select = "xyziar", filter = "-keep_first -drop_z_below_0")
+
+
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+#BiocManager::install(version = "3.7")
+#BiocManager::install("EBImage")
+las = readLAS("/home/rstudio/keys_work/keys/code/Example.las", select = "xyziar", filter = "-keep_first -drop_z_below_0")
 plot(las)
 #finished
 
@@ -57,4 +63,3 @@ plot(crowns, col = pastel.colors(100))
 #All right, at this point, the code has so many holes I don't think I can do anything short of fixing earlier issues. Otherwise I won't be able to competantly test the rest of the code
 #The issue this time is that I'm missing EMImage, but when I installed it before, it takes a about 10 minutes and there's no mention of it in the documentation.
 #finished eight chunk
-
