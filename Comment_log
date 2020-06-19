@@ -1,0 +1,6 @@
+Comments Week 1
+Project tasks completed:None
+However, good progress was made on the lidR data set, and I should have a working segmentation system very soon. As soon as that is over, I'll be able to move on to the other facets of my program.
+Major issues:
+	Code, mostly, there are a lot of discrepencies between the current version of lidR and the one my RStudio seems to work with, so a lot of my code is deprecated and I've got many errors with function definitions. I'll have to play around to get everything to work soon. Mainly, i need to get filter_poi working, along with the code around the hulls object. Hopefully, there'll be documentation, or I'll have to just hope the issue doesn't cause too much trouble.
+
