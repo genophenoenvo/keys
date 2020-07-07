@@ -2,3 +2,6 @@ chm_final<- raster("/home/rstudio/dav-anon/iplant/commons/community_released/aes
 set_lidr_threads(16)
 plot(chm_final)
 tree_tops = find_trees(chm_final, lmf(ws=5, hmin = 5), uniqueness = "incremental")
+plot(tree_tops)
+plot(chm, col = height.colors(50))
+sp::plot(tree_tops, add = T)
