@@ -1,0 +1,93 @@
+---
+title: "LidR Segmentation Script"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a documentation of the processes required to create a segmented image, along with some of the equations necessary to find individual trees.
+
+First, the following libraries must be installed.
+```{r}
+library(lidR)
+if (!require("lidR")) {
+  install.packages("lidR")
+  library('lidR')
+}
+if (!require("rgdal")) {
+  install.packages("rgdal")
+  library('rgdal')
+}
+if (!require("dplyr")) {
+  install.packages("dplyr")
+  library('dplyr')
+}
+if (!require("ggplot2")) {
+  install.packages("ggplot2")
+  library('ggplot2')
+}
+if (!require("rjson")) {
+  install.packages("rjson")
+  library('rjson')
+}
+if (!require("bitops")) {
+  install.packages("bitops")
+  library('bitops')
+}
+if (!require("jsonlite")) {
+  install.packages("jsonlite")
+  library('jsonlite')
+}
+if (!require("leaflet")) {
+  install.packages("leaflet")
+  library('leaflet')
+}
+if (!require("RCurl")) {
+  install.packages("RCurl")
+  library('RCurl')
+}
+if(!requireNamespace("EBImage"))
+  BiocManager::install("EBImage")
+  library("EBImage")
+```
+
+
+Once done, a file path must be set. In this case, this is the example.las file used, however, a different file type can be used, by ignoring portions of text(most of it, in fact)
+
+```{r}
+file_path = "/home/rstudio/keys/code/Example.las"
+las = readLAS(file_path)
+```
+With an las, once read, the following code needs to be run in order to normalize and classify ground points.
+```{r}
+las = lasground(las, csf())
+plot(las, color = "Classification")
+las = lasnormalize(las, tin())
+```
+Here, we'll define the algorithm used for the CHM made from the las.
+```{r}
+algo = pitfree(thresholds = c(0,10,20,30,40,50), subcircle = 0.2)
+chm  = grid_canopy(las, 0.5, algo)
+```
+
+Now, we have a raster, chm, which has a height-corrected map of our las. Once found, we can segment this, convert to polygons, and apply the countour.
+```{r}
+defaultW <- getOption("warn")
+options(warn = -1)
+hulls  = tree_hulls(las)
+#spplot(hulls, "Z")
+crowns = watershed(chm, th = 4)()
+plot(crowns, col = pastel.colors(100))
+options(warn = defaultW)
+```
+```{r}
+contour = rasterToPolygons(crowns, dissolve = TRUE)
+plot(contour)
+```
+This is just the outlines. Here are both, overalyed.
+```{r}
+plot(chm, col = height.colors(50))
+plot(contour, add = T)
+```
