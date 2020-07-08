@@ -1,0 +1,31 @@
+---
+title: "A description of the process for this project"
+output: html_notebook
+---
+
+  In order to get a working tree identification, we'll need a machine learning system capable of being trained. For this project, we'll be using DeepForest:
+```{text}
+DeepForest is a python package for predicting individual tree crowns from RGB imagery. Source code is available here: (https://github.com/weecology/DeepForest.git)
+-DeepForest Documentation
+```
+DeepForest comes equipped with a model that already does the basics of this, but it needs to be trained. The original model can tell use what a tree is, but not much else.
+
+DeepForest suggests using airborne LIDAR to train the model, combined with hand annotated airborne RGB data. The first of these taskes is handled in good ol' R studio. Using the lidR packages
+```{r}
+library(lidR)
+citation("lidR")
+```
+
+  The lidR package is an amazing way to analyze some of the data given by drones, specifically pointcloud data, and canopy height models. Now, the data from the Santa Rita Experimental Range comes as either a .laz, or a CHM.tif(and other forms, but these are the most relevant). Now while, we could work from the .laz file, by using the chm, we can skip the normalizing and smoothing processes, some of the most time consuming parts of this.
+
+  Well, what do we do with the chm? First, we have to get tree locations from it. This is to help the system understand what a "tree" is, and it improves the bounding box created by DeepForest. We'll use the local maximum filter, `lmf`. By setting the `lmf` minimum heights to specific values, we can get a collection of plants, each with a majority of a specific plant. Considering the time remaining for this internship, the ability to create hand-annotated data sets is severely curtailed, and this is a 'quick-and-dirty' method of getting similar results. Now, by setting `uniqueness = "incremental"`, we can basically create a set of spatial points, with an identification number(`treeID`) and a `Z` value, the height. With this, we can basically feed the data to DeepForest, and its segmentation code, and say
+  "Here are lots of mesquite trees." 
+  And here, we can feed this data to DeepForest, and train it! After doing these for various data points, we'd have a rudimentry system capable of identifying trees!
+  now, this is nowhere near as accurate as hand-annotated data, but, given more, time, that can be added. If we do have hand-annotated, or at least some form of relevant annotated data, we can use that to train the model.
+  Well, what's the R for? If we have annotated data, the chm can be used in conjunction with airborne data to pretrain the model. Its essentially an improvement to the system.
+  Credit to Weinstein, Marconi, Bohlman et al. for their work DeepForest and the training regimen, along with credit to Jean-Romain for the lidR package, and NEON for the data used to train the original model.
+  
+  
+  
+  
+  

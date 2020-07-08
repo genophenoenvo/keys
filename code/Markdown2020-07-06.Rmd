@@ -74,13 +74,8 @@ chm  = grid_canopy(las, 0.5, algo)
 
 Now, we have a raster, chm, which has a height-corrected map of our las. Once found, we can segment this, convert to polygons, and apply the countour.
 ```{r}
-defaultW <- getOption("warn")
-options(warn = -1)
-hulls  = tree_hulls(las)
-#spplot(hulls, "Z")
-crowns = watershed(chm, th = 4)()
+crowns = watershed(chm)()
 plot(crowns, col = pastel.colors(100))
-options(warn = defaultW)
 ```
 ```{r}
 contour = rasterToPolygons(crowns, dissolve = TRUE)
